@@ -146,11 +146,19 @@ def one_list(ident):
 # TODO 364: Complete route to update an individual ToDo item's priority
 @app.route('/update/<item>',methods=["GET","POST"])
 def update(item):
-    pass # Replace with code
     # This code should use the form you created above for updating the specific item and manage the process of updating the item's priority.
+    form = UpdatePriorityForm()
+    if form.validate_on_submit():
+        new_priority = form.new_priority.data
+        i = TodoItem.query.filter_by(description=item).first()
+        i.priority = new_priority
+        db.session.commit()
     # Once it is updated, it should redirect to the page showing all the links to todo lists.
     # It should flash a message: Updated priority of <the description of that item>
+        flash("successfully updated {} priority.".format(item))
+        return redirect(url_for("all_lists"))
     # HINT: What previous class example is extremely similar?
+    return render_template("update_item.html",item_name=item,form=form)
 
 # TODO 364: Fill in the update_item.html template to work properly with this update route. (HINT: Compare against example!)
 
