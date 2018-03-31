@@ -150,13 +150,14 @@ def update(item):
     form = UpdatePriorityForm()
     if form.validate_on_submit():
         new_priority = form.new_priority.data
-        i = TodoItem.query.filter_by(description=item).first()
+        i = TodoItem.query.filter_by(id=item).first()
+        print(i)
         i.priority = new_priority
         db.session.commit()
-    # Once it is updated, it should redirect to the page showing all the links to todo lists.
-    # It should flash a message: Updated priority of <the description of that item>
+        # Once it is updated, it should redirect to the page showing all the links to todo lists.
+        # It should flash a message: Updated priority of <the description of that item>
         flash("successfully updated {} priority.".format(item))
-        return redirect(url_for("all_lists"))
+        #return redirect(url_for("all_lists"))
     # HINT: What previous class example is extremely similar?
     return render_template("update_item.html",item_name=item,form=form)
 
@@ -165,10 +166,14 @@ def update(item):
 # TODO 364: Complete route to delete a whole ToDoList
 @app.route('/delete/<lst>',methods=["GET","POST"])
 def delete(lst):
-    pass # Replace with code
     # This code should successfully delete the appropriate todolist
+    l = TodoList.query.filter_by(title=lst).first()
+    db.session.delete(l)
+    db.session.commit()
     # Should flash a message about what was deleted, e.g. Deleted list <title of list>
+    flash("successfully deleted {}".format(lst))
     # And should redirect the user to the page showing all the todo lists
+    return redirect(url_for("all_lists"))
     # HINT: Compare against what you've done for updating and class notes -- the goal here is very similar, and in some ways simpler.
 
 if __name__ == "__main__":
