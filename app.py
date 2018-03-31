@@ -70,7 +70,7 @@ class UpdateButtonForm(FlaskForm):
 # TODO 364: Define a form class for updating the priority of a todolist item
 #(HINT: What class activity you have done before is this similar to?)
 class UpdatePriorityForm(FlaskForm):
-    new_priority = FloatField("What is the new priority of this TOTO item?")
+    new_priority = FloatField("What is the new priority of this TOTO item?",validators=[Required()])
     submit = SubmitField("Update")
 
 # TODO 364: Define a DeleteButtonForm class for use to delete todo items
@@ -156,8 +156,8 @@ def update(item):
         db.session.commit()
         # Once it is updated, it should redirect to the page showing all the links to todo lists.
         # It should flash a message: Updated priority of <the description of that item>
-        flash("successfully updated {} priority.".format(item))
-        #return redirect(url_for("all_lists"))
+        flash("successfully updated {} priority.".format(i.description))
+        return redirect(url_for("all_lists"))
     # HINT: What previous class example is extremely similar?
     return render_template("update_item.html",item_name=item,form=form)
 
